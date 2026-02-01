@@ -15,8 +15,10 @@ function setupHomePage(){
   var movedOnce = false;
 
   // Navigate to celebration page on yes click
+  // use location.replace so the previous page is not kept in history
+  // this prevents the browser back button from returning to the index
   yes.addEventListener('click', function(){
-    window.location.href = 'celebration.html';
+    window.location.replace('celebration.html?from=yes');
   });
 
   // Calculate center of element for distance checks
@@ -95,6 +97,15 @@ function setupHomePage(){
 // Celebration page: light confetti effect
 function setupCelebrationPage(){
   if(document.getElementById('celebration') === null) return;
+
+  // If arrived from the Yes button, hide the Back link so there is no on-page back button
+  try{
+    var params = new URLSearchParams(window.location.search);
+    if(params.get('from') === 'yes'){
+      var back = document.querySelector('.back');
+      if(back) back.style.display = 'none';
+    }
+  }catch(e){/* ignore URL parse errors */}
 
   // Create confetti pieces
   var colors = ['#ff577f','#ffb4c6','#ffd166','#ff6b6b','#9b5de5','#f15bb5'];
